@@ -26,28 +26,28 @@ namespace DataManagement
         /// </summary>
         public void CreateDatabase()
         {
-            //Our connection object to link to the database
+            // The connection object to link to the database.
             SqlConnection connection = Helper.CreateSQLServerConnection("Default");
             try
             {
-                //Custom connection string to only connect to the server layer of your SQL Database
+                // Custom connection string to only connect to the server layer of the SQL Database.
                 string connectionString = $"Data Source={connection.DataSource}; Integrated Security = True";
                 //Query to build new Database if it does not already exist.
                 string query = $"IF NOT EXISTS (SELECT 1 FROM sys.databases WHERE name ='{connection.Database}') " +
                 $" CREATE DATABASE {connection.Database}";
                 using (connection = new SqlConnection(connectionString))
                 {
-                    //A command object which will send our request to the Database <= Normally done for us by Dapper
+                    // A command object which will send a request to the Database <= Normally done by Dapper.
                     using (SqlCommand command = new SqlCommand(query, connection))
                     {
-                        //Checks if the connection is currently open, if not, it opens the connection.<= Normally done for us by Dapper
+                        //Checks if the connection is currently open, if not, it opens the connection.<= Normally done by Dapper.
                         if (connection.State == ConnectionState.Closed)
                         {
                             connection.Open();
                         }
                         //Executes an SQL Request that does not expect a response(Query) to be returned.
                         command.ExecuteNonQuery();
-                        //Closes the connection to the database manually.<= Normally done for us by Dapper
+                        //Closes the connection to the database manually.<= Normally done by Dapper.
                         connection.Close();
                     }
                 }
@@ -63,16 +63,16 @@ namespace DataManagement
         /// <returns>A confirmation of whther there are tables (TRUE) or not (FALSE)</returns>
        public bool DoTablesExist()
        {
-            //Our using statemtnqwhich builds our connection and disposes of it once finished.
+            // The using statement which builds connection and disposes of it once finished.
             using (var connection = Helper.CreateSQLServerConnection("Default"))
             {
-                //Quey to request the count of how many base tables are in the database structure. Base tables refers to user
-                //built tables and ignores inbuild tables such as index tables and reference/settings tables.
+                // Quey to request the count of how many base tables are in the database structure. Base tables refers to user.
+                // Built tables and ignores inbuild tables such as index tables and reference/settings tables.
                 string query = $"SELECT COUNT(*) FROM {connection.Database}.INFORMATION_SCHEMA.TABLES " +
                 $"WHERE TABLE_TYPE = 'BASE TABLE'";
-                //Sends the query to the databse and stores the returned table count.
+                // Sends the query to the databse and stores the returned table count.
                 int count = connection.QuerySingle<int>(query);
-                //If the count is above 0 return true, otherwise return false to indicate whether the databse has tabes or not.
+                // If the count is above 0 return true, otherwise return false to indicate whether the databse has tabes or not.
                 if (count > 0)
                 {
                     return true;
@@ -97,12 +97,12 @@ namespace DataManagement
         {
             try
             {
-                //Partial query to build table in database. Parameters passe to method will be inserted to complete the query string.
+                // Partial query to build table in database. Parameters passe to method will be inserted to complete the query string.
                 string query = $"CREATE TABLE {name} ({structure})";
-                //Our using statemtnqwhich builds our connection and disposes of it once finished.
+                // The using statemtn which builds connection and disposes of it once finished.
                 using (var connection = Helper.CreateSQLServerConnection("Default"))
                 {
-                    //Passes the query to the databse to be perfomed.
+                    // Passes the query to the databse to be performed.
                     connection.Execute(query);
                 }
             }
@@ -148,7 +148,7 @@ namespace DataManagement
         /// </summary>
         private void BuildCategoriesTable()
         {
-            //Defines the column names and attributes for the table
+            // Defines the column names and attributes for the table
             string structure = "Id int PRIMARY KEY IDENTITY(1,1), " +
                                "Name VARCHAR(50) NOT NULL";
 
@@ -161,7 +161,7 @@ namespace DataManagement
         /// </summary>
         private void BuildExpensesTable()
         {
-            //Defines the column names, attributes and foreign keys for the table
+            // Defines the column names, attributes and foreign keys for the table
             string structure = "Id int PRIMARY KEY IDENTITY(1,1), " +
                                "Date DATETIME NOT NULL, " +
                                "CategoryId int NOT NULL, " +
@@ -175,9 +175,9 @@ namespace DataManagement
 
         private void SeedUsersTable()
         {
-            //Create list to hold entriews that are being added.
+            // Create list to hold entriews that are being added.
             List<User> users = new List<User>();
-            //Add new entries to list and provide them with sample data.
+            // Add new entries to list and provide them with sample data.
             users.Add(new User 
             {   Id = 1, 
                 Name = "Troy Vaughn",
@@ -195,7 +195,7 @@ namespace DataManagement
                 Name = "Gary Barlow",
                 Role = "Sales"
             });
-            //Iterate through the list and pass each entry to the addd method to send it to the database.
+            // Iterate through the list and pass each entry to the add method to send it to the database.
             foreach (var user in users)
             {
                 AddNewUser(user);
@@ -204,9 +204,9 @@ namespace DataManagement
 
         private void SeedCategoriesTable()
         {
-            //Create list to hold entriews that are being added.
+            // Create list to hold entriews that are being added.
             List<Category> categories = new List<Category>();
-            //Add new entries to list and provide them with sample data.
+            // Add new entries to list and provide them with sample data.
             categories.Add(new Category
             {
                 Id = 1,
@@ -222,7 +222,7 @@ namespace DataManagement
                 Id = 3,
                 Name = "Utilities",
             });
-            //Iterate through the list and pass each entry to the addd method to send it to the database.
+            // Iterate through the list and pass each entry to the addd method to send it to the database.
             foreach (var category in categories)
             {
                 AddNewCategory(category);
@@ -231,9 +231,9 @@ namespace DataManagement
 
         private void SeedExpensesTable()
         {
-            //Create list to hold entriews that are being added.
+            // Create list to hold entriews that are being added.
             List<Expense> expenses = new List<Expense>();
-            //Add new entries to list and provide them with sample data.
+            // Add new entries to list and provide them with sample data.
             expenses.Add(new Expense 
             {
                 Id = 1,
@@ -258,7 +258,7 @@ namespace DataManagement
                 CategoryId = 3,
                 Date = DateTime.Now.AddDays(-112)
             });
-            //Iterate through the list and pass each entry to the addd method to send it to the database.
+            // Iterate through the list and pass each entry to the addd method to send it to the database.
             foreach (var expense in expenses)
             {
                 SaveNewExpense(expense);

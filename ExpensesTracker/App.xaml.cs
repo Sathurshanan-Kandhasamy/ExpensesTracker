@@ -17,14 +17,14 @@ namespace ExpensesTracker
     {
         public App()
         {
-            //Create our Database building class.
+            // Create database building class.
             DbBuilder builder = new DbBuilder();
-            //Tell it ti build the database. This will only do so if it doesn't already exist.
+            // If database doesn't already exist, build new one.
             builder.CreateDatabase();
-            //Check if the database contains tables. If not, run the table building code. 
+            // Check if the database contains tables. If not, run the table building code. 
             if (builder.DoTablesExist() == false)
             {
-                //Runs the code to build and seed the database tables.
+                // Runs the code to build and seed the database tables.
                 builder.BuildDatabaseTables();  
             }
         }

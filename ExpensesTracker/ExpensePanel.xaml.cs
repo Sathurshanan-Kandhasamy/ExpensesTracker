@@ -22,16 +22,16 @@ namespace ExpensesTracker
     /// </summary>
     public partial class ExpensePanel : UserControl
     {
-        //The class object used to communicate with the Database. 
+        // The class object used to communicate with the Database. 
         DataAdapter data = new DataAdapter();
 
-        //Lists used to populate the combo boxes.
+        // Lists used to populate the combo boxes.
         List<User> userList = new List<User>();
         List<Category> categoryList = new List<Category>();
-        //Lists used to populate the data grid.
+        // Lists used to populate the data grid.
         List<ExpenseView> expenseList = new List<ExpenseView>();
 
-        //Acts as a flag to indicate the correct save mode (NEW or UPDATE)
+        // Acts as a flag to indicate the correct save mode (NEW or UPDATE)
         bool isNewEntry = true;
 
         public ExpensePanel()
@@ -51,17 +51,16 @@ namespace ExpensesTracker
 
         private void SetupComboBoxes()
         {
-            //Gets the Users from the database
+            // Gets the Users from the database.
             userList = data.GetAllUsers();
-            //Sets the list as the source of the combo box. 
+            // Sets the list as the source of the combo box. 
             cboUsers.ItemsSource = userList;
-            //Sets the Name property of each list item as what displays in the combo box.
+            // Sets the Name property of each list item as what displays in the combo box.
             cboUsers.DisplayMemberPath = "Name";
-            //Sets the value that is returned when a combo box option is selected.
-            //IN this example the value will be the item Id (Primary Key)
+            // Sets the value that is returned when a combo box option is selected.
             cboUsers.SelectedValuePath = "Id";
 
-            //Repeats the same process for the categories combo box.
+            // Repeats the same process for the categories combo box.
             categoryList = data.GetAllCategories();
             cboCategory.ItemsSource = categoryList;
             cboCategory.DisplayMemberPath = "Name";
@@ -70,13 +69,13 @@ namespace ExpensesTracker
 
         private void ClearDataEntryFields()
         {
-            //Set the form text fields to blank.
+            // Set the form text fields to blank.
             txtId.Text = string.Empty;
             txtPrice.Text = string.Empty;
-            //Set the form combo boxes back to no entry selected.
+            // Set the form combo boxes back to no entry selected.
             cboCategory.SelectedIndex = -1;
             cboUsers.SelectedIndex = -1;
-            //Set the calendar data back to todays current date.
+            // Set the calendar data back to todays current date.
             pkrDate.SelectedDate = DateTime.Today;
 
             isNewEntry = true;
@@ -89,22 +88,22 @@ namespace ExpensesTracker
         /// <returns>Whether the data fields contain valid data.</returns>
         private bool IsFormFilledCorrectly()
         {
-            //Check if the price field holds a valid decimal number.
+            // Check if the price field holds a valid decimal number.
             if (decimal.TryParse(txtPrice.Text, out decimal num) == false)
             {
                 return false;
             }
-            //Checks if the combo box has an option selected and is not still on blank 
+            // Checks if the combo box has an option selected and is not still on blank.
             if (cboCategory.SelectedIndex < 0)
             {
                 return false;
             }
-            //Checks if the combo box has an option selected and is not still on blank 
+            // Checks if the combo box has an option selected and is not still on blank.
             if (cboUsers.SelectedIndex < 0)
             {
                 return false;
             }
-            //Checks if the date picker has a date selected which is not in the future.
+            // Checks if the date picker has a date selected which is not in the future.
             if (pkrDate.SelectedDate == null || pkrDate.SelectedDate > DateTime.Today)
             {
                 return false;
@@ -114,7 +113,7 @@ namespace ExpensesTracker
 
         private void btnSave_Click(object sender, RoutedEventArgs e)
         {
-            //Checks if the form is filled correctly. If not, alert the user and cancel further action.
+            // Checks if the form is filled correctly. If not, alert the user and cancel further action.
             if (IsFormFilledCorrectly() == false)
             {
                 MessageBox.Show("Please fill form correctly before saving.\n " +
@@ -123,13 +122,13 @@ namespace ExpensesTracker
                                 "*Date selected must not be in the future.") ;
                 return;
             }
-            //Collect all the form data and put it into a data object for saving.
+            // Collect all the form data and put it into a data object for saving.
             Expense currentExpense = new Expense();
             currentExpense.Price = decimal.Parse(txtPrice.Text);
             currentExpense.Date = pkrDate.SelectedDate.Value;
             currentExpense.UserId = (int)cboUsers.SelectedValue;
             currentExpense.CategoryId = (int)cboCategory.SelectedValue;
-            //Save the data based upon whether it is new data or an update to an existing record. 
+            // Save the data based upon whether it is new data or an update to an existing record. 
             if (isNewEntry)
             {
                 data.SaveNewExpense(currentExpense);
@@ -139,7 +138,7 @@ namespace ExpensesTracker
                 currentExpense.Id = int.Parse(txtId.Text);
                 data.UpdateExpense(currentExpense);
             }
-            //Update UI components to display current datsa state.
+            // Update UI components to display current datsa state.
             UpdateDataGrid();
             ClearDataEntryFields();
         }
@@ -158,7 +157,7 @@ namespace ExpensesTracker
             {
                 return;
             }
-            //Get the Id of the selected entry from the list.
+            // Get the Id of the selected entry from the list.
             int Id = expenseList[dgvExpenses.SelectedIndex].Id;
             // Open a message box to confirm deleting the selected entry.
             MessageBoxResult response = MessageBox.Show("Are you sure you want to delete this entry?",
@@ -179,19 +178,19 @@ namespace ExpensesTracker
             {
                 return;
             }
-            //Retrieve the Id (primary key) of the selected row in the table.
+            // Retrieve the Id (primary key) of the selected row in the table.
             int id = expenseList[dgvExpenses.SelectedIndex].Id;
-            //Request the record from the database that matches the provided id. 
+            // Request the record from the database that matches the provided id. 
             Expense selectedExpense = data.GetExpenseById(id);
-            //Set the text fields in the entry form to the matching properties of the model.
+            // Set the text fields in the entry form to the matching properties of the model.
             txtId.Text = selectedExpense.Id.ToString();
             txtPrice.Text = selectedExpense.Price.ToString();
-            //Set the Selected Value of the combo bnoxes to the entries that match the Id values of their matching
-            //properties. 
-            //NOTE: Don't use the SeletedIndex value in case the Id and row numbers do not match up.
+            // Set the Selected Value of the combo bnoxes to the entries that match the Id values of their matching
+            // properties. 
+            // NOTE: Don't use the SeletedIndex value in case the Id and row numbers do not match up.
             cboCategory.SelectedValue = selectedExpense.CategoryId;
             cboUsers.SelectedValue = selectedExpense.UserId;
-            //Set the datatime picker to match the value of the data property of the data model.
+            // Set the datatime picker to match the value of the data property of the data model.
             pkrDate.SelectedDate = selectedExpense.Date;
 
             isNewEntry = false;

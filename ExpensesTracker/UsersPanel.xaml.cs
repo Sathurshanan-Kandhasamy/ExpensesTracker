@@ -22,11 +22,11 @@ namespace ExpensesTracker
     /// </summary>
     public partial class UsersPanel : UserControl
     {
-        // Create our class object for communicating with the database. 
+        // Create class object for communicating with the database. 
         DataAdapter data = new DataAdapter();
         // A list of User objects.
         List<User> userList = new List<User>();
-        //Acts as a flag to indicate which way to save our data, as a new entry or an edit.
+        // Acts as a flag to indicate which way to save our data, as a new entry or an edit.
         bool isNewEntry = true;
 
         public UsersPanel()
@@ -47,7 +47,7 @@ namespace ExpensesTracker
             txtId.Text= string.Empty;
             txtName.Text= string.Empty;
             txtRole.Text= string.Empty;
-            //Sets the save flag to new entry mode.
+            // Sets the save flag to new entry mode.
             isNewEntry = true;
         }
 
@@ -77,7 +77,7 @@ namespace ExpensesTracker
             userEntry.Name = txtName.Text;
             userEntry.Role = txtRole.Text;
 
-            //Chooses the desired save mode based upon the state of the isNewEntry flag.
+            // Chooses the desired save mode based upon the state of the isNewEntry flag.
             if (isNewEntry)
             {
                 //Pass the user details to the database to be added.
@@ -105,12 +105,12 @@ namespace ExpensesTracker
 
         private void btnDelete_Click(object sender, RoutedEventArgs e)
         {
-            //Checks that a vlid row is selected, otherwise it returns out of the method.
+            // Checks that a valid row is selected, otherwise it returns out of the method.
             if (dgvUsers.SelectedIndex < 0)
             {
                 return;
             }
-            //Get the Id of the selected entry from the list.
+            // Get the Id of the selected entry from the list.
             int Id = userList[dgvUsers.SelectedIndex].Id;
             // Open a message box to confirm deleting the selected entry.
             MessageBoxResult response = MessageBox.Show("Are you sure you want to delete this entry?",
@@ -127,20 +127,20 @@ namespace ExpensesTracker
 
         private void dgvUsers_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            //Checks that a vlid row is selected, otherwise it returns out of the method.
+            // Checks that a valid row is selected, otherwise it returns out of the method.
             if (dgvUsers.SelectedIndex < 0)
             {
                 return;
             }
-            //Get the Id of the selected entry from the list.
+            // Get the Id of the selected entry from the list.
             int Id = userList[dgvUsers.SelectedIndex].Id;
-            //Gets the user from the database that matches the current Id value. 
+            // Gets the user from the database that matches the current Id value. 
             User userEntry = data.GetUserById(Id);
-            //Copy the user details into the form.
+            // Copy the user details into the form.
             txtId.Text= userEntry.Id.ToString();
             txtName.Text= userEntry.Name;
             txtRole.Text= userEntry.Role;
-            //Sets the save flag to edit mode.
+            // Sets the save flag to edit mode.
             isNewEntry= false;
         }
     }

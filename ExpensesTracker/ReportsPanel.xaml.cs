@@ -24,13 +24,13 @@ namespace ExpensesTracker
     /// </summary>
     public partial class ReportsPanel : UserControl
     {
-        //Class for managing all our SQL requests form the database for our data models.
+        // Class for managing all SQL requests form the database for the data models.
         DataAdapter data = new DataAdapter();
 
-        //Lists for managing my User reports.
+        // Lists for managing my User reports.
         List<User> fullUserList;
         List<User> displayUserList;
-        //Lists for managing thr expenses reports.
+        // Lists for managing thr expenses reports.
         List<ExpenseView> fullExpenseList;
         List<ExpenseView> displayExpenseList;
 
@@ -39,48 +39,48 @@ namespace ExpensesTracker
         {
             InitializeComponent();
 
-            //Create an array with the report options for the combobox.
+            // Create an array with the report options for the combobox.
             string[] reportOptions = {"User By Name", "Expense by Price", "Expense by Category"};
-            //Assign the array of options to the combobox.
+            // Assign the array of options to the combobox.
             cboReports.ItemsSource = reportOptions;
         }
 
-        //Triggers when the combobox slecetion is changed.
+        // Triggers when the combobox selection is changed.
         private void cboReports_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            //If the selected value of the combo box is the blank option, retuyrn out of ther method.
+            // If the selected value of the combo box is the blank option, return out of the method.
             if (cboReports.SelectedIndex < 0)
             {
                 return;
             }
-            //Swith on the current selected index of the combobox and run the associated code.
+            // Swith on the current selected index of the combobox and run the associated code.
             switch (cboReports.SelectedIndex)
             {
                 case 0:
-                    //Retrieve all the users from the database and order them by name using a LINQ atatement.
-                    //NOTE: LINQ is a code based query language used for filetring and sorting collecitons.
+                    // Retrieve all the users from the database and order them by name using a LINQ atatement.
+                    // NOTE: LINQ is a code based query language used for filetring and sorting collecitons.
                     fullUserList = data.GetAllUsers().OrderBy(user => user.Name).ToList();
-                    //Assign the returned list to the display list which will be used in the datagrid and for exporting.
+                    // Assign the returned list to the display list which will be used in the datagrid and for exporting.
                     displayUserList = fullUserList;
-                    //Pass the list to the method used for setting the datasource for the datagrid
+                    // Pass the list to the method used for setting the datasource for the datagrid.
                     UpdateDataGrid(displayUserList);
                     break;
 
                 case 1:
-                    //Retrieve all the expenses from the database and order them by Price using a LINQ atatement.
+                    // Retrieve all the expenses from the database and order them by Price using a LINQ atatement.
                     fullExpenseList = data.GetAllExpenses().OrderByDescending(expense => expense.Price).ToList();
-                    //Assign the returned list to the display list which will be used in the datagrid and for exporting.
+                    // Assign the returned list to the display list which will be used in the datagrid and for exporting.
                     displayExpenseList = fullExpenseList;
-                    //Pass the list to the method used for setting the datasource for the datagrid
+                    // Pass the list to the method used for setting the datasource for the datagrid.
                     UpdateDataGrid(displayExpenseList);
                     break;
 
                 case 2:
-                    //Retrieve all the expenses from the database and order them by Category Name using a LINQ atatement.
+                    // Retrieve all the expenses from the database and order them by Category Name using a LINQ atatement.
                     fullExpenseList = data.GetAllExpenses().OrderBy(expense => expense.CategoryName).ToList();
-                    //Assign the returned list to the display list which will be used in the datagrid and for exporting.
+                    // Assign the returned list to the display list which will be used in the datagrid and for exporting.
                     displayExpenseList = fullExpenseList;
-                    //Pass the list to the method used for setting the datasource for the datagrid
+                    // Pass the list to the method used for setting the datasource for the datagrid
                     UpdateDataGrid(displayExpenseList);
                     break;
             }
@@ -94,13 +94,13 @@ namespace ExpensesTracker
         /// <param name="displayList">The list to be assigned to the datagrid</param>
         private void UpdateDataGrid<T>(List<T> displayList)
         {
-            //Set the provided list as the source of data for the datagrid.
+            // Set the provided list as the source of data for the datagrid.
             dgvReports.ItemsSource = displayList;
-            //Refresh the datagrid display.
+            // Refresh the datagrid display.
             dgvReports.Items.Refresh();
         }
-
-        //Triggers whenever the text in the search textbox changes
+        
+        // Triggers whenever the text in the search textbox changes.
         private void txtSearch_TextChanged(object sender, TextChangedEventArgs e)
         {
             //If the current combobox option is the blank entry, return and do nothing. Otherwise, run the correct filter method for the 
@@ -151,16 +151,16 @@ namespace ExpensesTracker
 
         private void ExportToCSV<T>(List<T> exportList)
         {
-            //Creates the file dialog that lets us select a file location for our data.
+            // Creates the file dialog that lets user select a file location for the data.
             SaveFileDialog dialog = new SaveFileDialog();
-            //Sets the filters for the allowewd file types of the dialog.
+            // Sets the filters for the allowed file types of the dialog.
             dialog.Filter = "Comma-Delimitted-Values|*.csv|" +
                             "Plain Text File|*.txt";
-            //Sets the default file location for the dialog to be the MyDocuments folder.
+            // Sets the default file location for the dialog to be the MyDocuments folder.
             dialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
 
-            //Opens the file dialog from within the if statement and if it is used sucessfully (valid file name and save button pressed)
-            //the if statement logic will run.
+            // Opens the file dialog from within the if statement and if it is used sucessfully (valid file name and save button pressed)
+            // the if statement logic will run.
             if (dialog.ShowDialog() == true)
             {
                 using (StreamWriter writer = new StreamWriter(dialog.FileName))

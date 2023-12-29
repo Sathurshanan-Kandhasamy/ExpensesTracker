@@ -15,7 +15,7 @@ namespace DataManagement
 
         public List<User> GetAllUsers()
         {
-            //The SQL Query to be sent to the database with our request.
+            //The SQL Query to be sent to the database with the request.
             string query = "SELECT * FROM Users";
 
             // A using statement to manage the connection resource(object) which will dispose
@@ -29,7 +29,7 @@ namespace DataManagement
 
         public User GetUserById(int id)
         {
-            //The SQL Query to be sent to the database with our request.
+            //The SQL Query to be sent to the database with the request.
             string query = $"SELECT * FROM Users WHERE Id = {id}";
 
             // A using statement to manage the connection resource(object) which will dispose
@@ -43,7 +43,7 @@ namespace DataManagement
 
         public void AddNewUser(User userEntry)
         {
-            //The SQL Query to be sent to the database with our request.
+            //The SQL Query to be sent to the database with the request.
             string query = "INSERT INTO Users (Name,Role) " +
                            "VALUES (@Name,@Role)";
 
@@ -58,7 +58,7 @@ namespace DataManagement
 
         public void UpdateUser(User userEntry)
         {
-            //The SQL Query to be sent to the database with our request.
+            //The SQL Query to be sent to the database with the request.
             string query = "UPDATE Users " +
                            "SET Name = @Name, Role = @Role " +
                            "WHERE Id = @Id";
@@ -74,7 +74,7 @@ namespace DataManagement
 
         public void DeleteUser(int id)
         {
-            //The SQL Query to be sent to the database with our request.
+            //The SQL Query to be sent to the database with the request.
             string query = "DELETE FROM Users " +
                           $"WHERE Id = {id}";
 
@@ -93,7 +93,7 @@ namespace DataManagement
 
         public List<Category> GetAllCategories()
         {
-            //The SQL Query to be sent to the database with our request.
+            //The SQL Query to be sent to the database with the request.
             string query = "SELECT * FROM Categories";
 
             // A using statement to manage the connection resource(object) which will dispose
@@ -107,7 +107,7 @@ namespace DataManagement
 
         public void AddNewCategory(Category categoryEntry)
         {
-            //The SQL Query to be sent to the database with our request.
+            //The SQL Query to be sent to the database with the request.
             string query = "INSERT INTO Categories (Name) " +
                            "VALUES (@Name)";
 
@@ -126,7 +126,7 @@ namespace DataManagement
 
         public List<ExpenseView> GetAllExpenses()
         {
-            //The SQL Query to be sent to the database with our request.
+            //The SQL Query to be sent to the database with the request.
             string query = "SELECT Expenses.Id, Expenses.Date, Expenses.Price, " +
                            "Users.Name AS UserName, Categories.Name AS CategoryName " +
                            "FROM Categories " +
@@ -147,7 +147,7 @@ namespace DataManagement
 
         public Expense GetExpenseById(int id)
         {
-            //The SQL Query to be sent to the database with our request.
+            //The SQL Query to be sent to the database with the request.
             string query = $"SELECT * FROM Expenses WHERE Id = {id}";
 
             // A using statement to manage the connection resource(object) which will dispose
@@ -161,7 +161,7 @@ namespace DataManagement
 
         public void SaveNewExpense(Expense currentExpense)
         {
-            //The SQL Query to be sent to the database with our request.
+            //The SQL Query to be sent to the database with the request.
             string query = "INSERT INTO Expenses (Price,Date,UserId,CategoryId) " +
                            "VALUES (@Price,@Date,@UserId,@CategoryId)";
 
@@ -176,7 +176,7 @@ namespace DataManagement
 
         public void UpdateExpense(Expense expenseEntry)
         {
-            //The SQL Query to be sent to the database with our request.
+            //The SQL Query to be sent to the database with the request.
             string query = "UPDATE Expenses " +
                            "SET Price = @Price, Date = @Date, UserId = @UserId, CategoryId = @CategoryId " +
                            "WHERE Id = @Id";
@@ -192,7 +192,7 @@ namespace DataManagement
 
         public void DeleteExpense(int id)
         {
-            //The SQL Query to be sent to the database with our request.
+            //The SQL Query to be sent to the database with the request.
             string query = "DELETE FROM Expenses " +
                           $"WHERE Id = {id}";
 
